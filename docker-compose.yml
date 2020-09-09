@@ -1,0 +1,45 @@
+version: '3'
+services:
+  vue:
+    build:
+      context: ./spa-app
+    container_name: spa-vue
+    networks:
+      - vocalist
+    ports:
+      - 8010:8010
+    volumes:
+      - ./spa-app:/spa-app
+    working_dir: /spa-app
+    tty: true
+    # command: sh -c "cd assets && yarn install && yarn serve"
+
+  go:
+    build:
+      context: ./backend
+    container_name: backend-go
+    networks:
+      - vocalist
+    ports:
+      - 1323:1323
+    volumes:
+      - ./backend:/go/src/backend
+    working_dir: /go/src/backend
+    tty: true
+    # command: fresh
+
+  db:
+    container_name: dgraph-db
+    image: dgraph/standalone:v20.07.0
+    volumes:
+      -  ~/dgraph:/dgraph
+    ports:
+      - 8080:8080
+      - 9080:9080
+      - 8000:8000
+    networks:
+      - vocalist
+
+networks:
+  vocalist:
+    # driver: custom-driver-1
