@@ -3,7 +3,7 @@
     Search for miku w/ Docker<br>
     <iframe width="560" height="315" :src=url frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <br>
-    <v-row>
+    <v-row class="searchArea" >
       <v-col cols="12">
         <v-item-group>
           <v-row>
@@ -83,6 +83,8 @@
 
 <script>
 import draggable from 'vuedraggable';
+import axios from 'axios';
+
 export default {
   name: 'Home',
   props: ['details'],
@@ -99,18 +101,44 @@ export default {
   },
   watch: { 
     'details': {
-      handler(newVal, oldVal) {
-        console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      handler(newVal) {
+        // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
         this.list1 = newVal;
       },
       deep: true
     },
+    list2: function() {
+      console.log('Arr changed')
+      this.updateUserList();
+    }
   },
   methods: {
     clickVideo(videoId) {
       var sUrl = videoId
-      console.log (sUrl);
+      // console.log (sUrl);
       this.url = "https://www.youtube.com/embed/" + sUrl
+    },
+    updateUserList() {
+      var myList = this.list2
+      console.log(myList);
+      
+      // e.preventDefault();
+      // const params = new URLSearchParams();
+      // params.append('list2', myList);
+      // var params = {
+      //   list2:myList
+      // }
+      axios.post('/updateMyList', myList)
+      .then((response) => {
+        if(response.status == 200){
+          console.log(response.data);
+        }
+      })
+      .catch(function (error) {
+        alert("error!")
+        console.log(error);
+      });
+
     }
   }
 };
@@ -119,13 +147,18 @@ export default {
 label {
   padding:10px;
 }
+.searchArea{
+  padding-bottom: 360px;
+}
 .myplaylist{
-  background-color:rgba(140, 140, 140, 0.6);
+  padding: 6px;
+  background-color:rgba(0, 0, 0, 0.8);
   position: fixed;
   Width: 100%;
   height: 20%;
   bottom: 0;
   overflow: scroll;
+  z-index: 1;
 }
 
 </style>

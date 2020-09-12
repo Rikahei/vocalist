@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"backend/playlist"
 	"backend/youtubeApi"
 
 	"github.com/dgrijalva/jwt-go"
@@ -46,6 +47,11 @@ func searchVideo(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+func updateMyList(c echo.Context) (err error) {
+	result := playlist.GetMyList(c)
+	return c.JSON(http.StatusOK, result)
+}
+
 func main() {
 	e := echo.New()
 
@@ -62,6 +68,7 @@ func main() {
 	e.GET("/", accessible)
 
 	e.POST("/search", searchVideo)
+	e.POST("/updateMyList", updateMyList)
 
 	// Restricted group
 	r := e.Group("/restricted")

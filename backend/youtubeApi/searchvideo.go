@@ -22,7 +22,7 @@ var (
 	maxResults = flag.Int64("max-results", 9, "Max YouTube results")
 )
 
-const developerKey = "AIzaSyANteIP-ZrFbSi4I37jC9wuSj-ot9ej_lM"
+const developerKey = "AIzaSyAvUAHwvmcvxgEQwi75SR30Om3o1ljF5vU"
 
 func searchVideo(input string) map[string]string {
 
