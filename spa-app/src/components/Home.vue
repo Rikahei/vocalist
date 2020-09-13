@@ -1,7 +1,8 @@
 <template>
   <v-container fluid>
     Search for miku w/ Docker<br>
-    <iframe width="560" height="315" :src=url frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe class="centerPlayer" :src=url width="640px" height="360px" allow="autoplay"></iframe> 
+    <!-- <iframe width="560" height="315" :src=url frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
     <br>
     <v-row class="searchArea" >
       <v-col cols="12">
@@ -22,7 +23,7 @@
                       class="d-flex align-center"
                       dark
                       height="200px"
-                      max-width="340px"
+                      width="340px"
                       v-on:click="clickVideo(detail.videoId)"
                     >
                       <v-img
@@ -93,7 +94,7 @@ export default {
   },
   data (){
     return {
-      url: 'https://www.youtube.com/embed/AufydOsiD6M',
+      url: 'https://embed.nicovideo.jp/watch/sm35330510',
       clickedid: '',
       list1: [],
       list2: [],
@@ -116,7 +117,7 @@ export default {
     clickVideo(videoId) {
       var sUrl = videoId
       // console.log (sUrl);
-      this.url = "https://www.youtube.com/embed/" + sUrl
+      this.url = "https://embed.nicovideo.jp/watch/" + sUrl
     },
     updateUserList() {
       var myList = this.list2
@@ -144,6 +145,13 @@ export default {
 };
 </script>
 <style>
+
+.centerPlayer{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 label {
   padding:10px;
 }

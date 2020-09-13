@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/nicoApi"
 	"net/http"
 
 	"backend/playlist"
@@ -47,6 +48,12 @@ func searchVideo(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+func nicoSearchVideo(c echo.Context) error {
+	keyword := c.FormValue("keyword")
+	result := nicoApi.NicoSearch(keyword)
+	return c.JSON(http.StatusOK, result)
+}
+
 func updateMyList(c echo.Context) (err error) {
 	result := playlist.GetMyList(c)
 	return c.JSON(http.StatusOK, result)
@@ -67,7 +74,7 @@ func main() {
 	// Unauthenticated route
 	e.GET("/", accessible)
 
-	e.POST("/search", searchVideo)
+	e.POST("/search", nicoSearchVideo)
 	e.POST("/updateMyList", updateMyList)
 
 	// Restricted group
