@@ -1,8 +1,9 @@
 <template>
   <v-container fluid>
     Search for miku w/ Docker<br>
-    <iframe class="centerPlayer" :src=url width="640px" height="360px" allow="autoplay"></iframe> 
-    <!-- <iframe width="560" height="315" :src=url frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+    <!-- <iframe class="centerPlayer" :src=url width="640px" height="360px" allow="autoplay;fullscreen"></iframe>  -->
+    <!-- <iframe id="centerPlayer" :player="playStatus" width="560" height="315" :src=url frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+    <youtube :video-id="playerVideoId" :player-vars="playerVars" @ended="ended" class="centerPlayer"></youtube>
     <br>
     <v-row class="searchArea" >
       <v-col cols="12">
@@ -48,13 +49,13 @@
       <label>This is playlist</label>
       <draggable
         class="dragArea list-group row"
-        :list="list2"
+        :list="myList"
         group="videos"
         style="height:200px"
       >
         <div
           class="list-group-item"
-          v-for="detail in list2"
+          v-for="(detail, index) in myList"
           :key="detail.videoId"
         >
           <!-- <v-col> -->
@@ -64,7 +65,7 @@
                 dark
                 width="240px"
                 height="100px"
-                v-on:click="clickVideo(detail.videoId)"
+                v-on:click="clickMyList(index, detail.videoId)"
               >
                 <v-img
                   class="white--text align-end"
@@ -94,10 +95,14 @@ export default {
   },
   data (){
     return {
-      url: 'https://embed.nicovideo.jp/watch/sm35330510',
+      playerVideoId: '7DVIoHWNOks',
+      playerVars: {
+        autoplay: 0
+      },
       clickedid: '',
       list1: [],
-      list2: [],
+      myList: [],
+      playListSeq: 0,
     }
   },
   watch: { 
@@ -108,27 +113,44 @@ export default {
       },
       deep: true
     },
-    list2: function() {
-      console.log('Arr changed')
+    myList: function() {
+      console.log('mylist updated')
       this.updateUserList();
     }
   },
+  computed: {
+    player() {
+      return this.$refs.youtube.player
+    }
+  },
+
   methods: {
     clickVideo(videoId) {
-      var sUrl = videoId
-      // console.log (sUrl);
-      this.url = "https://embed.nicovideo.jp/watch/" + sUrl
+      this.playerVideoId = videoId
+      this.playerVars.autoplay = 1
+    },
+    clickMyList(seq, videoId) {
+      this.playerVideoId = videoId
+      this.playerVars.autoplay = 1
+      this.playListSeq = seq
+    },
+    ended() {
+      console.log('Video is ended')
+      this.playNext()
+    },
+    playNext() {
+      console.log('start next song')
+      this.playListSeq += 1
+      var nextSong = this.myList[this.playListSeq]
+      if(typeof(nextSong) != "undefined"){
+        this.playerVideoId = nextSong.videoId
+      }else{
+        console.log("This is last")
+        this.playListSeq = 0
+      }
     },
     updateUserList() {
-      var myList = this.list2
-      console.log(myList);
-      
-      // e.preventDefault();
-      // const params = new URLSearchParams();
-      // params.append('list2', myList);
-      // var params = {
-      //   list2:myList
-      // }
+      var myList = this.myList
       axios.post('/updateMyList', myList)
       .then((response) => {
         if(response.status == 200){
@@ -139,8 +161,7 @@ export default {
         alert("error!")
         console.log(error);
       });
-
-    }
+    },
   }
 };
 </script>

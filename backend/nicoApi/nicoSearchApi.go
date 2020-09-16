@@ -19,7 +19,7 @@ func NicoSearch(keyword string) map[string]string {
 	println(keyword)
 
 	req, err := http.NewRequest("GET", "https://api.search.nicovideo.jp/api/v2/video/contents/search?q="+
-		url.QueryEscape(keyword)+"&targets=title&fields=contentId,title,viewCounter,thumbnailUrl&filters[viewCounter][gte]=10000&_sort=-viewCounter&_offset=0&_limit=12&_context=apiguide", nil)
+		url.QueryEscape(keyword)+"&targets=title&fields=contentId,title,viewCounter,thumbnailUrl&filters[viewCounter][gte]=100&_sort=-viewCounter&_offset=0&_limit=16&_context=apiguide", nil)
 	if err != nil {
 		panic(err)
 	}

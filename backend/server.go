@@ -74,7 +74,7 @@ func main() {
 	// Unauthenticated route
 	e.GET("/", accessible)
 
-	e.POST("/search", nicoSearchVideo)
+	e.POST("/search", searchVideo)
 	e.POST("/updateMyList", updateMyList)
 
 	// Restricted group
