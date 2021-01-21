@@ -30,7 +30,7 @@ services:
 
   db:
     container_name: dgraph-db
-    image: dgraph/standalone:v20.07.0
+    image: dgraph/standalone:v20.07.3
     volumes:
       -  ~/dgraph:/dgraph
     ports:

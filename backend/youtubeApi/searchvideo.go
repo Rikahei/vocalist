@@ -19,10 +19,15 @@ type VideoList struct {
 
 var (
 	// query = flag.String("query", "初音ミク", "Search term")
-	maxResults = flag.Int64("max-results", 9, "Max YouTube results")
+	videoType = flag.String("video-type", "video", "Search type")
+	videoCategoryId = flag.String("video-category-id", "10", "Category id")
+	regionCode = flag.String("region-code", "JP", "Region Code")
+	maxResults = flag.Int64("max-results", 12, "Max YouTube results")
 )
 
-const developerKey = "AIzaSyAvUAHwvmcvxgEQwi75SR30Om3o1ljF5vU"
+// const developerKey = "AIzaSyAvUAHwvmcvxgEQwi75SR30Om3o1ljF5vU"
+// go-play-list key
+const developerKey = "AIzaSyBV3PYnhtLHHiw6q9jI6i2YlNqcNoSQfUI"
 
 func searchVideo(input string) map[string]string {
 
@@ -43,6 +48,9 @@ func searchVideo(input string) map[string]string {
 	// Make the API call to YouTube.
 	call := service.Search.List("id,snippet").
 		Q(*query).
+		Type(*videoType).
+		VideoCategoryId(*videoCategoryId).
+		RegionCode(*regionCode).
 		MaxResults(*maxResults)
 	response, err := call.Do()
 	if err != nil {
